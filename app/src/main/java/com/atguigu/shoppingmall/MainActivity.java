@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.rb_user:
                         position = 4;
-                        break ;
+                        break  ;
                 }
                 //根据位置切换到对应的Fragment
                 Fragment currentFragment = fragments.get(position);
