@@ -9,10 +9,14 @@ import android.widget.Toast;
 
 import com.atguigu.shoppingmall.R;
 import com.atguigu.shoppingmall.base.BaseFragment;
+import com.atguigu.shoppingmall.utils.Constants;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.Call;
 
 /**
  * Created by 熊猛 on 2017/2/22.
@@ -45,6 +49,23 @@ public class HomeFragment extends BaseFragment {
         super.initData();
         Log.e("TAG", "主页数据初始化了");
         //textView.setText("主页");
+        getDataFromNet();
+    }
+
+    private void getDataFromNet() {
+
+        OkHttpUtils.get().url(Constants.HOME_URL).id(100).build().execute(new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                Log.e("TAG", "联网失败=="+e.getMessage());
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                Log.e("TAG", "联网成功=="+response);
+
+            }
+        });
     }
 
     @OnClick({R.id.tv_search_home, R.id.tv_message_home, R.id.ib_home})
