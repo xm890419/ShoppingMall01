@@ -7,8 +7,10 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
 import com.atguigu.shoppingmall.R;
 import com.atguigu.shoppingmall.base.BaseFragment;
+import com.atguigu.shoppingmall.home.bean.HomeBean;
 import com.atguigu.shoppingmall.utils.Constants;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -62,10 +64,19 @@ public class HomeFragment extends BaseFragment {
 
             @Override
             public void onResponse(String response, int id) {
-                Log.e("TAG", "联网成功=="+response);
+                //Log.e("TAG", "联网成功=="+response);
+                processData(response);
 
             }
         });
+    }
+    //1.三种解析方式：fastjson解析数据和Gson和手动解析
+    //2.设置适配器
+    private void processData(String response) {
+        //使用fastjson解析json数据
+        HomeBean homeBean = JSON.parseObject(response,HomeBean.class);
+        Log.e("TAG","解析数据成功=="+homeBean.getResult().getHot_info().get(0).getName());
+
     }
 
     @OnClick({R.id.tv_search_home, R.id.tv_message_home, R.id.ib_home})
