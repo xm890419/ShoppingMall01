@@ -145,7 +145,7 @@ public class HomeAdapter extends RecyclerView.Adapter {
         }
 
         public void setData(List<HomeBean.ResultBean.BannerInfoBean> banner_info) {
-            tv_banner.setText("banner图片");
+            tv_banner.setText("banner图片") ;
         }
     }
 }
