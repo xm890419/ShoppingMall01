@@ -90,7 +90,7 @@ public class HomeFragment extends BaseFragment {
                 break;
             case R.id.ib_home:
                 Toast.makeText(mContext, "回到顶部", Toast.LENGTH_SHORT).show();
-                break;
+                break ;
         }
     }
 }
