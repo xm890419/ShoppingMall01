@@ -5,11 +5,19 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.atguigu.shoppingmall.R;
 import com.atguigu.shoppingmall.home.bean.HomeBean;
+import com.atguigu.shoppingmall.utils.Constants;
+import com.bumptech.glide.Glide;
+import com.youth.banner.Banner;
+import com.youth.banner.listener.OnBannerListener;
+import com.youth.banner.loader.ImageLoader;
+import com.youth.banner.transformer.BackgroundToForegroundTransformer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -136,16 +144,41 @@ public class HomeAdapter extends RecyclerView.Adapter {
 
     private class BannerViewHolder extends RecyclerView.ViewHolder {
         private final Context mContext;
-        private TextView tv_banner;
+        //private TextView tv_banner;
+        private Banner banner;
 
         public BannerViewHolder(Context mContext, View inflate) {
             super(inflate);
             this.mContext = mContext;
-            tv_banner = (TextView) inflate.findViewById(R.id.tv_banner);
+            //tv_banner = (TextView) inflate.findViewById(R.id.tv_banner);
+            banner = (Banner) inflate.findViewById(R.id.banner);
         }
 
         public void setData(List<HomeBean.ResultBean.BannerInfoBean> banner_info) {
-            tv_banner.setText("banner图片") ;
+            //tv_banner.setText("banner图片") ;
+            //1.得到数据
+            //2.设置Banner的数据
+            //简单使用
+            List<String> images = new ArrayList<>();
+            for (int i =0;i<banner_info.size();i++){
+                images.add(Constants.BASE_URL_IMAGE+banner_info.get(i).getImage());
+            }
+            banner.setImages(images).setImageLoader(new ImageLoader() {
+                @Override
+                public void displayImage(Context context, Object path, ImageView imageView) {
+                    Glide.with(context).load(path).crossFade().into(imageView);
+                }
+            }).start();
+            //设置样式
+            banner.setBannerAnimation(BackgroundToForegroundTransformer.class);
+            //3.设置Banner的点击事件
+            banner.setOnBannerListener(new OnBannerListener() {
+                @Override
+                public void OnBannerClick(int position) {
+                    int realPosition = position -1;
+                    Toast.makeText(mContext, "realPosition=="+realPosition, Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 }
