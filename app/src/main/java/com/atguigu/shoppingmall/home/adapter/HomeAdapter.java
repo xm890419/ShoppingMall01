@@ -29,7 +29,7 @@ public class HomeAdapter extends RecyclerView.Adapter {
 
     private final Context mContext;
     private final HomeBean.ResultBean result;
-    private final LayoutInflater inflater;
+    private final LayoutInflater inflater ;
     /**
      * 六种类型
      */
