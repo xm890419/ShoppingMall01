@@ -123,7 +123,7 @@ public class HomeFragment extends BaseFragment {
                 break;
             case R.id.ll_main_scan:
                 Toast.makeText(mContext, "扫一扫", Toast.LENGTH_SHORT).show();
-                break;
+                break ;
         }
     }
 
