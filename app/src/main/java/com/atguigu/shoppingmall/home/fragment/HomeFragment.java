@@ -1,7 +1,7 @@
 package com.atguigu.shoppingmall.home.fragment;
 
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -90,9 +90,22 @@ public class HomeFragment extends BaseFragment {
         HomeAdapter homeAdapter = new HomeAdapter(mContext, homeBean.getResult());
         rvHome.setAdapter(homeAdapter);
 
-        //设置布局管理器
-        rvHome.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
+        GridLayoutManager manager = new GridLayoutManager(mContext,1);
+        rvHome.setLayoutManager(manager);
 
+        //设置布局管理器
+        //rvHome.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
+        manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                if(position <= 3) {
+                    ibHome.setVisibility(View.GONE);
+                }else {
+                    ibHome.setVisibility(View.VISIBLE);
+                }
+                return 1;
+            }
+        });
     }
 
     @OnClick({R.id.tv_search_home, R.id.tv_message_home, R.id.ib_home,R.id.ll_main_scan})
@@ -105,7 +118,8 @@ public class HomeFragment extends BaseFragment {
                 Toast.makeText(mContext, "消息", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.ib_home:
-                Toast.makeText(mContext, "回到顶部", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(mContext, "回到顶部", Toast.LENGTH_SHORT).show();
+                rvHome.scrollToPosition(0);
                 break;
             case R.id.ll_main_scan:
                 Toast.makeText(mContext, "扫一扫", Toast.LENGTH_SHORT).show();
