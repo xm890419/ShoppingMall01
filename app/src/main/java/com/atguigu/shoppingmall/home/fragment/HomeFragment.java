@@ -1,10 +1,14 @@
 package com.atguigu.shoppingmall.home.fragment;
 
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +39,8 @@ public class HomeFragment extends BaseFragment {
     RecyclerView rvHome;
     @BindView(R.id.ib_home)
     ImageButton ibHome;
+    @BindView(R.id.ll_main_scan)
+    LinearLayout llMainScan;
 
     //private TextView textView;
     @Override
@@ -61,7 +67,7 @@ public class HomeFragment extends BaseFragment {
         OkHttpUtils.get().url(Constants.HOME_URL).id(100).build().execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
-                Log.e("TAG", "联网失败=="+e.getMessage());
+                Log.e("TAG", "联网失败==" + e.getMessage());
             }
 
             @Override
@@ -72,23 +78,24 @@ public class HomeFragment extends BaseFragment {
             }
         });
     }
+
     //1.三种解析方式：fastjson解析数据和Gson和手动解析
     //2.设置适配器
     private void processData(String response) {
         //使用fastjson解析json数据
-        HomeBean homeBean = JSON.parseObject(response,HomeBean.class);
-        Log.e("TAG","解析数据成功=="+homeBean.getResult().getHot_info().get(0).getName());
+        HomeBean homeBean = JSON.parseObject(response, HomeBean.class);
+        Log.e("TAG", "解析数据成功==" + homeBean.getResult().getHot_info().get(0).getName());
 
         //设置RecyclerView的适配器
-        HomeAdapter homeAdapter = new HomeAdapter(mContext,homeBean.getResult());
+        HomeAdapter homeAdapter = new HomeAdapter(mContext, homeBean.getResult());
         rvHome.setAdapter(homeAdapter);
 
         //设置布局管理器
-        rvHome.setLayoutManager(new LinearLayoutManager(mContext,LinearLayoutManager.VERTICAL,false));
+        rvHome.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
 
     }
 
-    @OnClick({R.id.tv_search_home, R.id.tv_message_home, R.id.ib_home})
+    @OnClick({R.id.tv_search_home, R.id.tv_message_home, R.id.ib_home,R.id.ll_main_scan})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_search_home:
@@ -99,7 +106,19 @@ public class HomeFragment extends BaseFragment {
                 break;
             case R.id.ib_home:
                 Toast.makeText(mContext, "回到顶部", Toast.LENGTH_SHORT).show();
-                break ;
+                break;
+            case R.id.ll_main_scan:
+                Toast.makeText(mContext, "扫一扫", Toast.LENGTH_SHORT).show();
+                break;
         }
     }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // TODO: inflate a fragment view
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
+        ButterKnife.bind(this, rootView);
+        return rootView;
+    }
+
 }
