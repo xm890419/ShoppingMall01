@@ -101,7 +101,7 @@ public class HomeAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemCount() {
         //所有的类型写完后改成6
-        return 5;
+        return 6;
     }
 
 
@@ -124,7 +124,7 @@ public class HomeAdapter extends RecyclerView.Adapter {
         } else if (viewType == RECOMMEND) {
             return new RecommendViewHolder(mContext, inflater.inflate(R.layout.recommend_item, null));
         } else if (viewType == HOT) {
-            //return new HotViewHolder(mContext,inflater.inflate(R.layout.hot_item,null));
+            return new HotViewHolder(mContext, inflater.inflate(R.layout.hot_item, null));
         }
         return null;
     }
@@ -154,6 +154,8 @@ public class HomeAdapter extends RecyclerView.Adapter {
             RecommendViewHolder recommendViewHolder = (RecommendViewHolder) holder;
             recommendViewHolder.setData(result.getRecommend_info());
         } else if (getItemViewType(position) == HOT) {
+            HotViewHolder hotViewHolder = (HotViewHolder) holder;
+            hotViewHolder.setData(result.getHot_info());
 
         }
 
@@ -298,18 +300,42 @@ public class HomeAdapter extends RecyclerView.Adapter {
         TextView tvRecommend;
         @BindView(R.id.gv_recommend)
         GridView gvRecommend;
+
         public RecommendViewHolder(Context mContext, View inflate) {
             super(inflate);
-            ButterKnife.bind(this,inflate);
+            ButterKnife.bind(this, inflate);
         }
 
         public void setData(List<HomeBean.ResultBean.RecommendInfoBean> recommend_info) {
-            RecommendAdapter recommendAdapter = new RecommendAdapter(mContext,recommend_info);
+            RecommendAdapter recommendAdapter = new RecommendAdapter(mContext, recommend_info);
             gvRecommend.setAdapter(recommendAdapter);
             gvRecommend.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Toast.makeText(mContext, "position=="+position, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "position==" + position, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
+    class HotViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.tv_more_hot)
+        TextView tvMoreHot;
+        @BindView(R.id.gv_hot)
+        GridView gvHot;
+        public HotViewHolder(Context mContext, View inflate) {
+            super(inflate);
+            ButterKnife.bind(this,inflate);
+        }
+
+        public void setData(List<HomeBean.ResultBean.HotInfoBean> hot_info) {
+            HotAdapter hotAdapter = new HotAdapter(mContext,hot_info);
+            gvHot.setAdapter(hotAdapter);
+
+            gvHot.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Toast.makeText(mContext, "position==" + position, Toast.LENGTH_SHORT).show();
                 }
             });
         }
