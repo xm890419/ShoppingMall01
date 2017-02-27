@@ -341,7 +341,7 @@ public class HomeAdapter extends RecyclerView.Adapter {
                     goodsBean.setCover_price(listBean.getCover_price());
                     goodsBean.setProduct_id(listBean.getProduct_id());
                     goodsBean.setFigure(listBean.getFigure());
-                    goodsBean.setOrigin_price(listBean.getOrigin_price());
+                    //goodsBean.setOrigin_price(listBean.getOrigin_price());
 
                     Intent intent = new Intent(mContext,GoodsInfoActivity.class);
                     intent.putExtra(GOODS_BEAN,goodsBean);

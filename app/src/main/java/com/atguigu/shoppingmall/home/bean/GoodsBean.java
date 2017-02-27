@@ -19,15 +19,18 @@ public class GoodsBean implements Serializable{
     private String figure;
     private String name;
     private String product_id;
-    private String origin_price;
+    //某个商品在购物车购买的数量
+    private int number = 1;
 
-    public String getOrigin_price() {
-        return origin_price;
+    public int getNumber() {
+        return number;
     }
 
-    public void setOrigin_price(String origin_price) {
-        this.origin_price = origin_price;
+    public void setNumber(int number) {
+        this.number = number;
     }
+
+
 
     public String getCover_price() {
         return cover_price;
@@ -68,6 +71,7 @@ public class GoodsBean implements Serializable{
                 ", figure='" + figure + '\'' +
                 ", name='" + name + '\'' +
                 ", product_id='" + product_id + '\'' +
+                ", number=" + number +
                 '}';
     }
 }
