@@ -1,6 +1,7 @@
 package com.atguigu.shoppingmall.home.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.atguigu.shoppingmall.R;
+import com.atguigu.shoppingmall.app.GoodsInfoActivity;
+import com.atguigu.shoppingmall.home.bean.GoodsBean;
 import com.atguigu.shoppingmall.home.bean.HomeBean;
 import com.atguigu.shoppingmall.utils.Constants;
 import com.bumptech.glide.Glide;
@@ -37,6 +40,7 @@ import cn.iwgang.countdownview.CountdownView;
 public class HomeAdapter extends RecyclerView.Adapter {
 
 
+    public static final String GOODS_BEAN = "goodsBean";
     private final Context mContext;
     private final HomeBean.ResultBean result;
     private final LayoutInflater inflater;
@@ -328,14 +332,26 @@ public class HomeAdapter extends RecyclerView.Adapter {
             ButterKnife.bind(this,inflate);
         }
 
-        public void setData(List<HomeBean.ResultBean.HotInfoBean> hot_info) {
+        public void setData(final List<HomeBean.ResultBean.HotInfoBean> hot_info) {
             HotAdapter hotAdapter = new HotAdapter(mContext,hot_info);
             gvHot.setAdapter(hotAdapter);
 
             gvHot.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Toast.makeText(mContext, "position==" + position, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(mContext, "position==" + position, Toast.LENGTH_SHORT).show();
+                    HomeBean.ResultBean.HotInfoBean hotInfoBean = hot_info.get(position);
+                    //传递数据
+                    GoodsBean goodsBean = new GoodsBean();
+                    goodsBean.setName(hotInfoBean.getName());
+                    goodsBean.setCover_price(hotInfoBean.getCover_price());
+                    goodsBean.setFigure(hotInfoBean.getFigure());
+                    goodsBean.setProduct_id(hotInfoBean.getProduct_id());
+
+                    Intent intent = new Intent(mContext, GoodsInfoActivity.class);
+                    intent.putExtra(GOODS_BEAN,goodsBean);
+                    mContext.startActivity(intent);
+
                 }
             });
         }
