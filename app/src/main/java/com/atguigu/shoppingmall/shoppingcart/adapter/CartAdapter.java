@@ -15,6 +15,7 @@ import com.atguigu.shoppingmall.utils.CartStorage;
 import com.atguigu.shoppingmall.utils.Constants;
 import com.bumptech.glide.Glide;
 
+import java.util.Iterator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -69,7 +70,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         //1.先得到数据
-        GoodsBean goodsBean = allData.get(position);
+        final GoodsBean goodsBean = allData.get(position);
         //2.绑定数据
         holder.cbGov.setChecked(goodsBean.isChecked());
         Glide.with(mContext).load(Constants.BASE_URL_IMAGE+goodsBean.getFigure()).into(holder.ivGov);
@@ -82,6 +83,16 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
         holder.addSubView.setMinValue(1);
         //设置库存-来自服务器-
         holder.addSubView.setMaxValue(100);
+
+        holder.addSubView.setOnNumberChangerListener(new AddSubView.OnNumberChangerListener() {
+            @Override
+            public void onNumberChanger(int value) {
+                //1.回调数量
+                goodsBean.setNumber(value);
+                CartStorage.getInstance(mContext).updateData(goodsBean);
+                showTotalPrice();
+            }
+        });
 
     }
 
@@ -130,7 +141,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
     }
     //删除数据
     public void deleteData() {
-        if(allData != null && allData.size() > 0) {
+        /*if(allData != null && allData.size() > 0) {
             for (int i = 0;i < allData.size();i++){
                 GoodsBean goodsBean = allData.get(i);
                 if(goodsBean.isChecked()) {
@@ -143,6 +154,21 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
                     i--;
                 }
             }
+        }*/
+        if(allData != null && allData.size() > 0) {
+            for (Iterator iterator = allData.iterator();iterator.hasNext();){
+                GoodsBean goodsBean = (GoodsBean) iterator.next();
+                if(goodsBean.isChecked()) {
+                    int position  = allData.indexOf(goodsBean);
+                    //1.内存中删除
+                    iterator.remove();
+                    //本地也要同步
+                    CartStorage.getInstance(mContext).deleteData(goodsBean);
+                    //刷新页面
+                    notifyItemRemoved(position);
+                }
+            }
+
         }
     }
 
