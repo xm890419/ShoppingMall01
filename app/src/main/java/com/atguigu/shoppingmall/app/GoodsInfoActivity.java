@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -71,6 +72,10 @@ public class GoodsInfoActivity extends AppCompatActivity {
     LinearLayout llRoot;
     @BindView(R.id.activity_goods_info)
     LinearLayout activityGoodsInfo;
+    @BindView(R.id.tv_origin_price)
+    TextView tvOriginPrice;
+    @BindView(R.id.rl_origin_price)
+    RelativeLayout rlOriginPrice;
     private GoodsBean goodsBean;
 
     @Override
@@ -86,15 +91,21 @@ public class GoodsInfoActivity extends AppCompatActivity {
         // GoodsBean goodsBean = (GoodsBean) getIntent().getSerializableExtra(HomeAdapter.GOODS_BEAN);
         goodsBean = (GoodsBean) getIntent().getSerializableExtra(HomeAdapter.GOODS_BEAN);
         //Toast.makeText(this, "" + goodsBean.toString(), Toast.LENGTH_SHORT).show();
+        int a = getIntent().getIntExtra("1",0);
+        if(a == 1){
+            rlOriginPrice.setVisibility(View.VISIBLE);
+            tvOriginPrice.setText("￥"+goodsBean.getOrigin_price());
+        }
         setData();
     }
 
     private void setData() {
         //1.设置图片
-        Glide.with(this).load(Constants.BASE_URL_IMAGE+goodsBean.getFigure()).into(ivGoodInfoImage);
+        Glide.with(this).load(Constants.BASE_URL_IMAGE + goodsBean.getFigure()).into(ivGoodInfoImage);
         //2.设置名称和价格
         tvGoodInfoName.setText(goodsBean.getName());
-        tvGoodInfoPrice.setText("￥"+goodsBean.getCover_price());
+        tvGoodInfoPrice.setText("￥" + goodsBean.getCover_price());
+
         //3.设置加载网页
         loadWeb("http://mp.weixin.qq.com/s/Cf3DrW2lnlb-w4wYaxOEZg");
     }
@@ -108,7 +119,7 @@ public class GoodsInfoActivity extends AppCompatActivity {
         //设置双击单击
         webSetting.setUseWideViewPort(true);
         //设置WebViewClient,如果没有设置，调起系统的浏览器打开新的连接
-        wbGoodInfoMore.setWebViewClient(new WebViewClient(){
+        wbGoodInfoMore.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
@@ -132,7 +143,7 @@ public class GoodsInfoActivity extends AppCompatActivity {
         wbGoodInfoMore.loadUrl(url);
     }
 
-    @OnClick({R.id.ib_good_info_back, R.id.ib_good_info_more, R.id.tv_good_info_callcenter, R.id.tv_good_info_collection, R.id.tv_good_info_cart, R.id.btn_good_info_addcart, R.id.tv_more_share, R.id.tv_more_search, R.id.tv_more_home,R.id.btn_more})
+    @OnClick({R.id.ib_good_info_back, R.id.ib_good_info_more, R.id.tv_good_info_callcenter, R.id.tv_good_info_collection, R.id.tv_good_info_cart, R.id.btn_good_info_addcart, R.id.tv_more_share, R.id.tv_more_search, R.id.tv_more_home, R.id.btn_more})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ib_good_info_back:
@@ -140,9 +151,9 @@ public class GoodsInfoActivity extends AppCompatActivity {
                 break;
             case R.id.ib_good_info_more:
                 //Toast.makeText(this, "更多", Toast.LENGTH_SHORT).show();
-                if(llRoot.isShown()) {
+                if (llRoot.isShown()) {
                     llRoot.setVisibility(View.GONE);
-                }else {
+                } else {
                     llRoot.setVisibility(View.VISIBLE);
                 }
                 break;

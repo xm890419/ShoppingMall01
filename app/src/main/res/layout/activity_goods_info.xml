@@ -99,6 +99,25 @@
                             android:text="￥150.00"
                             android:textColor="#ed3f3f"
                             android:textSize="20sp" />
+                        <RelativeLayout
+                            android:visibility="gone"
+                            android:id="@+id/rl_origin_price"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:id="@+id/tv_origin_price"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="￥159.00"
+                                android:layout_marginLeft="20dp"
+                                android:textColor="#9a9a9a" />
+                            <View
+                                android:layout_marginTop="8dp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_width="70dp"
+                                android:layout_height="1dp"
+                                android:background="@drawable/black_background"/>
+                        </RelativeLayout>
 
                         <View
                             android:layout_width="match_parent"

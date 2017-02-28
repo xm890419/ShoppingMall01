@@ -1,13 +1,10 @@
 package com.atguigu.shoppingmall.shoppingcart.fragment;
 
-import android.graphics.Color;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.widget.TextView;
 
+import com.atguigu.shoppingmall.R;
 import com.atguigu.shoppingmall.base.BaseFragment;
-import com.atguigu.shoppingmall.home.bean.GoodsBean;
 import com.atguigu.shoppingmall.utils.CartStorage;
 
 /**
@@ -15,20 +12,21 @@ import com.atguigu.shoppingmall.utils.CartStorage;
  */
 
 public class CartFragment extends BaseFragment {
-    private TextView textView;
+    //private TextView textView;
     @Override
     public View initView() {
-        textView = new TextView(mContext);
+        /*textView = new TextView(mContext);
         textView.setTextSize(25);
         textView.setGravity(Gravity.CENTER);
-        textView.setTextColor(Color.RED);
-        return textView;
+        textView.setTextColor(Color.RED);*/
+        View view = View.inflate(mContext, R.layout.fragment_shopping_cart,null);
+        return view;
     }
 
     @Override
     public void initData() {
         super.initData();
-        Log.e("TAG", "购物车数据初始化了");
+        /*Log.e("TAG", "购物车数据初始化了");
         textView.setText("购物车");
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -38,7 +36,7 @@ public class CartFragment extends BaseFragment {
                 goodsBean.setNumber(3);
                 CartStorage.getInstance(mContext).updateData(goodsBean);
             }
-        });
+        });*/
     }
 
     @Override
