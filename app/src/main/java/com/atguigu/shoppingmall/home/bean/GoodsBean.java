@@ -20,6 +20,15 @@ public class GoodsBean implements Serializable{
     private String name;
     private String product_id;
     private String origin_price;
+    private boolean isChecked = true;
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
+    }
 
     public String getOrigin_price() {
         return origin_price;

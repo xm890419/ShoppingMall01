@@ -87,7 +87,7 @@ public class CartFragment extends BaseFragment {
             //购物车有数据
             llEmptyShopcart.setVisibility(View.GONE);
             //设置RecyclerView的适配器
-            adapter = new CartAdapter(mContext,allData);
+            adapter = new CartAdapter(mContext,allData,tvShopcartTotal,checkboxAll,checkboxDeleteAll);
             recyclerview.setAdapter(adapter);
             //布局管理器
             recyclerview.setLayoutManager(new LinearLayoutManager(mContext,LinearLayoutManager.VERTICAL,false));
