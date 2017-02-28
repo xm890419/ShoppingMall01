@@ -114,6 +114,20 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
         }
     }
 
+    public void checkAll_none(boolean isChecked) {
+        if(allData != null && allData.size() >0) {
+            for (int i =0;i < allData.size();i++){
+                GoodsBean goodsBean = allData.get(i);
+                //设置是否勾选状态
+                goodsBean.setChecked(isChecked);
+                checkboxAll.setChecked(isChecked);
+                checkboxDeleteAll.setChecked(isChecked);
+                //更新视图
+                notifyItemChanged(i);
+            }
+        }
+    }
+
     class MyViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.cb_gov)
         CheckBox cbGov;
