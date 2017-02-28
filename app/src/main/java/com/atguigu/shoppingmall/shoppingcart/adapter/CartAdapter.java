@@ -42,7 +42,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
         showTotalPrice();
     }
 
-    private void showTotalPrice() {
+    public void showTotalPrice() {
         //显示总价格
         tvShopcartTotal.setText("合计"+getTotalPrice());
     }
@@ -88,6 +88,31 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
     public int getItemCount() {
         return allData.size();
     }
+    //校验是否全选
+    public void checkAll() {
+        if(allData != null && allData.size() > 0) {
+            int number = 0;
+            for (int i =0;i < allData.size();i++){
+                GoodsBean goodsBean = allData.get(i);
+                if(!goodsBean.isChecked()) {
+                    //只要有一个不勾选
+                    checkboxAll.setChecked(false);
+                    checkboxDeleteAll.setChecked(false);
+                }else {
+                    //勾选
+                    number++;
+                }
+            }
+            if(allData.size() == number) {
+                checkboxAll.setChecked(true);
+                checkboxDeleteAll.setChecked(true);
+            }
+        }else {
+            //没有数据
+            checkboxAll.setChecked(false);
+            checkboxDeleteAll.setChecked(false);
+        }
+    }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.cb_gov)
@@ -101,9 +126,29 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
         @BindView(R.id.addSubView)
         AddSubView addSubView;
 
-        MyViewHolder(View itemView) {
+        MyViewHolder(final View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(listener != null) {
+                        listener.onItemClick(itemView,getLayoutPosition());
+                    }
+                }
+            });
         }
+    }
+    //设置item的监听
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
+    //回调点击事件的监听
+    private OnItemClickListener listener;
+
+    //点击item的监听
+    public interface OnItemClickListener{
+        public void onItemClick(View view,int position);
     }
 }

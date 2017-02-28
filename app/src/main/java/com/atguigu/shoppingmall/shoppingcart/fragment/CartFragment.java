@@ -55,6 +55,7 @@ public class CartFragment extends BaseFragment {
     @BindView(R.id.ll_empty_shopcart)
     LinearLayout llEmptyShopcart;
     private CartAdapter adapter;
+    private List<GoodsBean> allData;
 
     //private TextView textView;
     @Override
@@ -82,7 +83,7 @@ public class CartFragment extends BaseFragment {
                 CartStorage.getInstance(mContext).updateData(goodsBean);
             }
         });*/
-        List<GoodsBean> allData = CartStorage.getInstance(mContext).getAllData();
+        allData = CartStorage.getInstance(mContext).getAllData();
         if(allData != null && allData.size()>0) {
             //购物车有数据
             llEmptyShopcart.setVisibility(View.GONE);
@@ -92,6 +93,21 @@ public class CartFragment extends BaseFragment {
             //布局管理器
             recyclerview.setLayoutManager(new LinearLayoutManager(mContext,LinearLayoutManager.VERTICAL,false));
             //设置点击事件
+            adapter.setOnItemClickListener(new CartAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    //1.设置Bean对象状态取反
+                    GoodsBean goodsBean = allData.get(position);
+                    goodsBean.setChecked(!goodsBean.isChecked());
+                    adapter.notifyItemChanged(position);
+                    //2.刷新价格
+                    adapter.showTotalPrice();
+                    //3.校验是否全选
+                    adapter.checkAll();
+                }
+            });
+            //3.校验是否全选
+            adapter.checkAll();
         }else {
             //购物车没有数据
             llEmptyShopcart.setVisibility(View.VISIBLE);
