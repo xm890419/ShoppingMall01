@@ -49,11 +49,13 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
         tvShopcartTotal.setText("合计"+getTotalPrice());
     }
     //返回总价格
-    private double getTotalPrice() {
+    public double getTotalPrice() {
         double totalPrice = 0;
         if(allData != null && allData.size() >0) {
             for (int i =0;i < allData.size();i++){
+                //遍历出来
                 GoodsBean goodsBean = allData.get(i);
+                //必须是选择状态
                 if(goodsBean.isChecked()) {
                     totalPrice = totalPrice + Double.parseDouble(goodsBean.getCover_price())*goodsBean.getNumber();
                 }
@@ -85,11 +87,14 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
         holder.addSubView.setMaxValue(100);
 
         holder.addSubView.setOnNumberChangerListener(new AddSubView.OnNumberChangerListener() {
+            //回传过来的值
             @Override
             public void onNumberChanger(int value) {
                 //1.回调数量
                 goodsBean.setNumber(value);
+                //2.持久化
                 CartStorage.getInstance(mContext).updateData(goodsBean);
+                //3.显示总价格
                 showTotalPrice();
             }
         });
@@ -115,6 +120,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
                     number++;
                 }
             }
+            //勾选的数量和购物车的条目相同就全选
             if(allData.size() == number) {
                 checkboxAll.setChecked(true);
                 checkboxDeleteAll.setChecked(true);
@@ -129,9 +135,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
     public void checkAll_none(boolean isChecked) {
         if(allData != null && allData.size() >0) {
             for (int i =0;i < allData.size();i++){
+                //把购物车里面的Bean对象都设置勾选或者非勾选
                 GoodsBean goodsBean = allData.get(i);
                 //设置是否勾选状态
                 goodsBean.setChecked(isChecked);
+                //设置CheckBox的状态
                 checkboxAll.setChecked(isChecked);
                 checkboxDeleteAll.setChecked(isChecked);
                 //更新视图
@@ -144,6 +152,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
         /*if(allData != null && allData.size() > 0) {
             for (int i = 0;i < allData.size();i++){
                 GoodsBean goodsBean = allData.get(i);
+                //是否选中，选中才删除哦
                 if(goodsBean.isChecked()) {
                     //1.内存中删除
                     allData.remove(goodsBean);
@@ -187,9 +196,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
         MyViewHolder(final View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            //在这个地方设置item的点击事件
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    //回调接口
                     if(listener != null) {
                         listener.onItemClick(itemView,getLayoutPosition());
                     }
