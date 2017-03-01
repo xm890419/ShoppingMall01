@@ -223,7 +223,8 @@ public class CartFragment extends BaseFragment {
 
                 break;
             case R.id.btn_check_out:
-                Toast.makeText(mContext, "结算", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(mContext, "结算", Toast.LENGTH_SHORT).show();
+                pay();
                 break;
             case R.id.checkbox_delete_all:
                 //Toast.makeText(mContext, "删除的全选/反选", Toast.LENGTH_SHORT).show();
@@ -262,27 +263,23 @@ public class CartFragment extends BaseFragment {
     public static final String PARTNER = "2088911876712776";
     // 商户收款账号
     public static final String SELLER = "chenlei@atguigu.com";
-
-
     // 商户私钥，pkcs8格式
-    public static final String RSA_PRIVATE = "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBANDl5XiZplckwpJ/\n"+
-    "EVejypog8kwjqVPAWQ0tGYWG/E4g1ccFKjlICSWlkPiJY6JTpVwQ9xbfA12HVEZ\n"+
-            "6hH4k9GIIJI7H5/dDOFdCRyJUcXGx/6cTHiK1oe3BxJ/vtYRCmqX6FaiChXSmr\n"+
-            "nero6QtMhElWVlxXsQoll6rcQg5AgMBAAECgYBrW4tIJKcBKCo7AcTW5p2MApyj\n"+
-            "lrxCB5t8kw4HuqzWNjfHtgDqQ/717tJBButISraxRGYLzJR/kpFUid3q6HaGjdcs\n"+
-            "8IHPTAtTaOMVrp3MVizoJgd2JQ5ATO0loMVqAzqCftmr/UsKYzt/r/ghBQUq73cQ\n"+
-            "KHPLpTq98ZGONvxJQJBAPKupv5NAJARPfl4s6j/j/JJ8B4E5VXm0CFjR2dCLk6\n"+
-            "e15lQ1U2Sc7XJHm5gJUmxAVMlVhohDLFrchwx0aAisCQQDcXJ6mUhB5TnpMWljD\n"+
-            "Kn4CJA0bK5vQhZmOIcKrPfb/q90qzgqJTEckz1CPYErx/vbiiAxVNuXR8ADmtco\n"+
-            "cYErAkA1BbnUco0Nv1kDKEujGh7jRF8k9nGFTs9dhX1r70db1WXN7I58mcjZLGt\n"+
-            "zefLNZEUKiKUEL93g5PUX9ZHm2nAkEAnOxgFjTuglQh0z3VNRXs5KUurqNVSsu\n"+
-            "tKaaCHQyBtQOxcLAghGNwEraJaKM4S6izi5IypiRXO6e1ayzZw2zQJBAIMDTt5g\n"+
-            "j1lZEBrLIxo2mRrTJKLQCLuW77CrMJtN679G39X9DBeao7dGP2agyVE7SYTJiV\n"+
-            "E0hkilFDq3xItew=";
+    public static final String RSA_PRIVATE = "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBANDl5XiZplckwpJ/\n" +
+                        "EVejypog8kwjqVPAWQ0tGYWG/E4g1ccF+KjlICSWlkPiJY6JTpVwQ9xbfA12HVEZ\n" +
+                       "6hH4k9GIIJI7+H5/dDOFdCRyJUcXGx/6cTHiK1oe3BxJ/+vtYRCmqX6FaiChXSmr\n" +
+                      "nero6+QtMhElWVlxXsQoll6rcQg5AgMBAAECgYBrW4tIJKcBKCo7AcTW5p2MApyj\n" +
+                        "lrxCB5t8kw4HuqzWNjfHtgDqQ/717tJBButISraxRGYLzJR/kpFUid3q6HaGjdcs\n" +
+                        "8IHPTAtTaOMVrp3MVizoJgd2JQ5ATO0loMVqAzqCftmr/UsKYzt/r/ghBQUq73cQ\n" +
+                        "KHPLpTq98Z+GONvxJQJBAPKup+v5NAJARPfl4s6j/j/JJ8B4E5VXm0CFjR2dCLk6\n" +
+                        "e15lQ1U2Sc7XJHm5gJUmxAVMlVhohDLFr+chwx0aAisCQQDcXJ6mUhB5TnpMWljD\n" +
+                        "Kn4CJA0bK5vQhZmOIcKrPfb/q90qzgqJTEckz1CPY+Erx/vbiiAxVNuXR8ADmtco\n" +
+                        "cYErAkA+1BbnUco0Nv1kDKEujGh7jRF8k9nGFTs9dhX1r70db1WXN7I58mcjZLGt\n" +
+                        "zefLNZEUKiKUE+L93g5PUX9ZHm2nAkEAnOxgFjTuglQ+h0z3VNRXs5KUurqNVSsu\n" +
+                        "tKaaCHQyBtQOxcLAghGNwEraJaKM4S6izi5IypiRX+O6e1ayzZw2zQJBAIMDTt5g\n" +
+                        "j1lZEBrLIxo2mRrTJKLQCLuW77CrMJtN6+79G39X9DBeao7dGP2agyVE7SYTJiV+\n" +
+                        "E0hkilFDq3xItew=";;
     // 支付宝公钥
-    public static final String RSA_PUBLIC = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDQ5eV4maZXJMKSfxFXo8qaIPJMI6lTwFkNLRmFhvxOINXHBfio5SAklpZD4iWOiU6VcEPcW3wNdh1RGeoRJPRiCCSO/hf3QzhXQkciVHFxsfnEx4itaHtwcSf/r7WEQpqlhWogoV0pq53q6OvkLTIRJVlZcV7EKJZeq3EIOQIDAQAB";
-
-
+    public static final String RSA_PUBLIC = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDQ5eV4maZXJMKSfxFXo8qaIPJMI6lTwFkNLRmFhvxOINXHBfio5SAklpZD4iWOiU6VcEPcW3wNdh1RGeoR+JPRiCCSO/h+f3QzhXQkciVHFxsf+nEx4itaHtwcSf/r7WEQpql+hWogoV0pq53q6OvkLTIRJVlZcV7EKJZeq3EIOQIDAQAB";
     private static final int SDK_PAY_FLAG = 1;
 
     @SuppressLint("HandlerLeak")
@@ -320,13 +317,13 @@ public class CartFragment extends BaseFragment {
                 default:
                     break;
             }
-        }
-
-        ;
+        };
     };
+
 
     /**
      * call alipay sdk pay. 调用SDK支付
+     *
      */
     public void pay() {
         if (TextUtils.isEmpty(PARTNER) || TextUtils.isEmpty(RSA_PRIVATE) || TextUtils.isEmpty(SELLER)) {
@@ -334,13 +331,12 @@ public class CartFragment extends BaseFragment {
                     .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialoginterface, int i) {
                             //
-                            //                            finish();
+                           // finish();
                         }
                     }).show();
             return;
         }
-        //生成订单信息-在客户端或者服务器
-        String orderInfo = getOrderInfo("硅谷内裤", "好棒好棒的内裤",  adapter.getTotalPrice()+"");
+        String orderInfo = getOrderInfo("测试的商品", "该测试商品的详细描述", "0.01");
 
         /**
          * 特别注意，这里的签名逻辑需要放在服务端，切勿将私钥泄露在代码中！
@@ -358,7 +354,7 @@ public class CartFragment extends BaseFragment {
         /**
          * 完整的符合支付宝参数规范的订单信息
          */
-        final String payInfo = orderInfo +"&sign=\""+ sign +"\"&"+ getSignType();
+        final String payInfo = orderInfo + "&sign=\"" + sign + "\"&" + getSignType();
 
         Runnable payRunnable = new Runnable() {
 
@@ -384,6 +380,7 @@ public class CartFragment extends BaseFragment {
 
     /**
      * create the order info. 创建订单信息
+     *
      */
     private String getOrderInfo(String subject, String body, String price) {
 
@@ -391,53 +388,54 @@ public class CartFragment extends BaseFragment {
         String orderInfo = "partner=" + "\"" + PARTNER + "\"";
 
         // 签约卖家支付宝账号
-        orderInfo = "&seller_id="+ "\"" +SELLER +"\"";
+        orderInfo += "&seller_id=" + "\"" + SELLER + "\"";
 
         // 商户网站唯一订单号
-        orderInfo = "&out_trade_no="+ "\"" +getOutTradeNo() +"\"";
+        orderInfo += "&out_trade_no=" + "\"" + getOutTradeNo() + "\"";
 
         // 商品名称
-        orderInfo = "&subject="+ "\"" +subject +"\"";
+        orderInfo += "&subject=" + "\"" + subject + "\"";
 
         // 商品详情
-        orderInfo = "&body="+ "\""+ body +"\"";
+        orderInfo += "&body=" + "\"" + body + "\"";
 
         // 商品金额
-        orderInfo = "&total_fee=" +"\""+ price +"\"";
+        orderInfo += "&total_fee=" + "\"" + price + "\"";
 
         // 服务器异步通知页面路径
-        orderInfo = "&notify_url="+ "\""+ "http://notify.msp.hk/notify.htm"+ "\"";
+        orderInfo += "&notify_url=" + "\"" + "http://notify.msp.hk/notify.htm" + "\"";
 
         // 服务接口名称， 固定值
-        orderInfo = "&service=\"mobile.securitypay.pay\"";
+        orderInfo += "&service=\"mobile.securitypay.pay\"";
 
         // 支付类型， 固定值
-        orderInfo = "&payment_type=\"1\"";
+        orderInfo += "&payment_type=\"1\"";
 
         // 参数编码， 固定值
-        orderInfo = "&_input_charset=\"utf-8\"";
+        orderInfo += "&_input_charset=\"utf-8\"";
 
         // 设置未付款交易的超时时间
         // 默认30分钟，一旦超时，该笔交易就会自动被关闭。
         // 取值范围：1m～15d。
         // m-分钟，h-小时，d-天，1c-当天（无论交易何时创建，都在0点关闭）。
         // 该参数数值不接受小数点，如1.5h，可转换为90m。
-        orderInfo = "&it_b_pay=\"30m\"";
+        orderInfo += "&it_b_pay=\"30m\"";
 
         // extern_token为经过快登授权获取到的alipay_open_id,带上此参数用户将使用授权的账户进行支付
-        // orderInfo = "&extern_token="  "\""  extern_token  "\"";
+        // orderInfo += "&extern_token=" + "\"" + extern_token + "\"";
 
         // 支付宝处理完请求后，当前页面跳转到商户指定页面的路径，可空
-        orderInfo = "&return_url=\"m.alipay.com\"";
+        orderInfo += "&return_url=\"m.alipay.com\"";
 
         // 调用银行卡支付，需配置此参数，参与签名， 固定值 （需要签约《无线银行卡快捷支付》才能使用）
-        // orderInfo = "&paymethod=\"expressGateway\"";
+        // orderInfo += "&paymethod=\"expressGateway\"";
 
         return orderInfo;
     }
 
     /**
      * get the out_trade_no for an order. 生成商户订单号，该值在商户端应保持唯一（可自定义格式规范）
+     *
      */
     private String getOutTradeNo() {
         SimpleDateFormat format = new SimpleDateFormat("MMddHHmmss", Locale.getDefault());
@@ -453,7 +451,8 @@ public class CartFragment extends BaseFragment {
     /**
      * sign the order info. 对订单信息进行签名
      *
-     * @param content 待签名订单信息
+     * @param content
+     *            待签名订单信息
      */
     private String sign(String content) {
         return SignUtils.sign(content, RSA_PRIVATE);
@@ -461,10 +460,12 @@ public class CartFragment extends BaseFragment {
 
     /**
      * get the sign type we use. 获取签名方式
+     *
      */
     private String getSignType() {
         return "sign_type=\"RSA\"";
     }
+
 
 
 }
