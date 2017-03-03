@@ -1,6 +1,7 @@
 package com.atguigu.shoppingmall.type.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -14,6 +15,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.atguigu.shoppingmall.R;
+import com.atguigu.shoppingmall.app.GoodsInfoActivity;
+import com.atguigu.shoppingmall.home.adapter.HomeAdapter;
+import com.atguigu.shoppingmall.home.bean.GoodsBean;
 import com.atguigu.shoppingmall.type.bean.TypeBean;
 import com.atguigu.shoppingmall.utils.Constants;
 import com.atguigu.shoppingmall.utils.DensityUtil;
@@ -137,7 +141,23 @@ public class TypeRightAdapter extends RecyclerView.Adapter {
                     public void onClick(View v) {
                         int position = (int) v.getTag();
                         //Toast.makeText(mContext, "position=="+hotList.get(position).getCover_price(), Toast.LENGTH_SHORT).show();
-                        Toast.makeText(mContext, "position==" + position, Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(mContext, "position==" + position, Toast.LENGTH_SHORT).show();
+                        String cover_price = hotList.get(position).getCover_price();
+                        String figure = hotList.get(position).getFigure();
+                        String name = hotList.get(position).getName();
+                        String product_id = hotList.get(position).getProduct_id();
+
+                        //创建商品Bean对象
+                        GoodsBean goodsBean = new GoodsBean();
+                        goodsBean.setProduct_id(product_id);
+                        goodsBean.setCover_price(cover_price);
+                        goodsBean.setName(name);
+                        goodsBean.setFigure(figure);
+
+                        Intent intent = new Intent(mContext, GoodsInfoActivity.class);
+                        intent.putExtra(HomeAdapter.GOODS_BEAN,goodsBean);
+                        mContext.startActivity(intent);
+
                     }
                 });
             }
@@ -158,7 +178,7 @@ public class TypeRightAdapter extends RecyclerView.Adapter {
 
         public void setData(final TypeBean.ResultBean.ChildBean childBean) {
             //1.请求图片
-            Glide.with(mContext).load(Constants.BASE_URL_IMAGE+childBean.getPic()).into(ivOrdinaryRight);
+            Glide.with(mContext).load(Constants.BASE_URL_IMAGE+childBean.getPic()).placeholder(R.drawable.new_img_loading_2).into(ivOrdinaryRight);
             //2.设置文本
             tvOrdinaryRight.setText(childBean.getName());
             llRoot.setOnClickListener(new View.OnClickListener() {

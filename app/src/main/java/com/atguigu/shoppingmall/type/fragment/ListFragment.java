@@ -63,6 +63,8 @@ public class ListFragment extends BaseFragment {
                 leftAdapter.changeSelected(position);
                 //2.刷新
                 leftAdapter.notifyDataSetChanged();
+
+                getDataFromNet(urls[position]);
             }
         });
         //联网请求
