@@ -63,22 +63,28 @@ public class TypeRightAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return 1;
+        return 1 + child.size();
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == HOT) {
             return new HotViewHolder(mContext, inflater.inflate(R.layout.item_hot_right, null));
+        } else if (viewType == COMMON) {
+            return new CommonViewHolder(mContext, inflater.inflate(R.layout.item_common_right, null));
         }
         return null;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if(getItemViewType(position) == HOT) {
+        if (getItemViewType(position) == HOT) {
             HotViewHolder hotViewHolder = (HotViewHolder) holder;
             hotViewHolder.setData(hotList);
+        }else if(getItemViewType(position) == COMMON) {
+            CommonViewHolder viewHolder = (CommonViewHolder) holder;
+            int realPosition = position -1;
+            viewHolder.setData(child.get(realPosition));
         }
     }
 
@@ -87,53 +93,80 @@ public class TypeRightAdapter extends RecyclerView.Adapter {
         LinearLayout llHotRight;
         @BindView(R.id.hsl_hot_right)
         HorizontalScrollView hslHotRight;
+
         public HotViewHolder(Context mContext, View inflate) {
             super(inflate);
-            ButterKnife.bind(this,inflate);
+            ButterKnife.bind(this, inflate);
         }
 
         public void setData(final List<TypeBean.ResultBean.HotProductListBean> hotList) {
-            for (int i =0;i<hotList.size();i++){
-                final TypeBean.ResultBean.HotProductListBean hotProductListBean = hotList.get(i);
+            for (int i = 0; i < hotList.size(); i++) {
+                TypeBean.ResultBean.HotProductListBean hotProductListBean = hotList.get(i);
                 //外面的线性布局
                 LinearLayout layout = new LinearLayout(mContext);
-                final LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(-2,-2);
-                params.setMargins(DensityUtil.dip2px(mContext,5),0,DensityUtil.dip2px(mContext,5),DensityUtil.dip2px(mContext,20));
+                final LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(-2, -2);
+                params.setMargins(DensityUtil.dip2px(mContext, 5), 0, DensityUtil.dip2px(mContext, 5), DensityUtil.dip2px(mContext, 20));
 
                 layout.setGravity(Gravity.CENTER);//设置布局居中
                 layout.setOrientation(LinearLayout.VERTICAL);//设置竖直方向
                 //创建图片
                 ImageView imageView = new ImageView(mContext);
                 //设置图片宽和高80dip
-                LinearLayout.LayoutParams ivParams = new LinearLayout.LayoutParams(DensityUtil.dip2px(mContext,80),DensityUtil.dip2px(mContext,80));
+                LinearLayout.LayoutParams ivParams = new LinearLayout.LayoutParams(DensityUtil.dip2px(mContext, 80), DensityUtil.dip2px(mContext, 80));
                 //设置间距
-                ivParams.setMargins(0,0,0,DensityUtil.dip2px(mContext,10));
+                ivParams.setMargins(0, 0, 0, DensityUtil.dip2px(mContext, 10));
                 //请求图片
-                Glide.with(mContext).load(Constants.BASE_URL_IMAGE+hotProductListBean.getFigure()).into(imageView);
-                layout.addView(imageView,ivParams);
+                Glide.with(mContext).load(Constants.BASE_URL_IMAGE + hotProductListBean.getFigure()).into(imageView);
+                layout.addView(imageView, ivParams);
 
                 //--创建文本
                 TextView textView = new TextView(mContext);
                 LinearLayout.LayoutParams tvParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 textView.setGravity(Gravity.CENTER);
                 textView.setTextColor(Color.parseColor("#ed3f3f"));
-                textView.setText("￥"+hotProductListBean.getCover_price());
+                textView.setText("￥" + hotProductListBean.getCover_price());
                 //把文本添加到线性布局
-                layout.addView(textView,tvParams);
+                layout.addView(textView, tvParams);
 
                 //把每个线性布局添加到外部的线性布局中
-                llHotRight.addView(layout,params);
+                llHotRight.addView(layout, params);
                 //设置item的点击事件
                 layout.setTag(i);
                 layout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        int position  = (int) v.getTag();
+                        int position = (int) v.getTag();
                         //Toast.makeText(mContext, "position=="+hotList.get(position).getCover_price(), Toast.LENGTH_SHORT).show();
-                        Toast.makeText(mContext, "position=="+position, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, "position==" + position, Toast.LENGTH_SHORT).show();
                     }
                 });
             }
+        }
+    }
+
+    class CommonViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.iv_ordinary_right)
+        ImageView ivOrdinaryRight;
+        @BindView(R.id.tv_ordinary_right)
+        TextView tvOrdinaryRight;
+        @BindView(R.id.ll_root)
+        LinearLayout llRoot;
+        public CommonViewHolder(Context mContext, View inflate) {
+            super(inflate);
+            ButterKnife.bind(this,inflate);
+        }
+
+        public void setData(final TypeBean.ResultBean.ChildBean childBean) {
+            //1.请求图片
+            Glide.with(mContext).load(Constants.BASE_URL_IMAGE+childBean.getPic()).into(ivOrdinaryRight);
+            //2.设置文本
+            tvOrdinaryRight.setText(childBean.getName());
+            llRoot.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(mContext, ""+childBean.getName(), Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 }
