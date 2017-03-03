@@ -1,20 +1,23 @@
 package com.atguigu.shoppingmall.type.fragment;
 
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.atguigu.shoppingmall.R;
 import com.atguigu.shoppingmall.base.BaseFragment;
 import com.atguigu.shoppingmall.type.adapter.TypeLeftAdapter;
+import com.atguigu.shoppingmall.type.adapter.TypeRightAdapter;
 import com.atguigu.shoppingmall.type.bean.TypeBean;
 import com.atguigu.shoppingmall.utils.Constants;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -83,7 +86,25 @@ public class ListFragment extends BaseFragment {
 
     private void processData(String response) {
         TypeBean typeBean = JSON.parseObject(response,TypeBean.class);
-        Toast.makeText(mContext, ""+typeBean.getResult().get(0).getName(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(mContext, ""+typeBean.getResult().get(0).getName(), Toast.LENGTH_SHORT).show();
+        List<TypeBean.ResultBean> result = typeBean.getResult();
+        if(result != null && result.size() >0) {
+            TypeRightAdapter adapter = new TypeRightAdapter(mContext,result);
+            rvRight.setAdapter(adapter);
+            //设置布局管理器
+            GridLayoutManager manager = new GridLayoutManager(mContext,3);
+            manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                @Override
+                public int getSpanSize(int position) {
+                    if(position == 0) {
+                        return 3;
+                    }else {
+                        return 1;
+                    }
+                }
+            });
+            rvRight.setLayoutManager(manager);
+        }
     }
 
 }
