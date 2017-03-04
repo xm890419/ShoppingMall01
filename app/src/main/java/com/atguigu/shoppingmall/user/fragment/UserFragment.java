@@ -90,7 +90,7 @@ public class UserFragment extends BaseFragment implements GradationScrollView.Sc
             }
         });
         //设置默认是隐藏的 //设置标题的背景颜色  -透明
-        tvUsercenter.setBackgroundColor(Color.argb((int) 0, 255, 0, 0));
+        tvUsercenter.setBackgroundColor(Color.argb((int) 0, 255, 0, 0)) ;
     }
 
     @Override
