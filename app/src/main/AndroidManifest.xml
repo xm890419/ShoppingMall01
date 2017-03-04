@@ -35,7 +35,8 @@
             android:windowSoftInputMode="adjustResize|stateHidden" />
 
         <!-- alipay sdk end -->
-        <activity android:name=".app.CallCenterActivity"></activity>
+        <activity android:name=".app.CallCenterActivity" />
+        <activity android:name=".app.LoginActivity"></activity>
     </application>
 
 </manifest>
