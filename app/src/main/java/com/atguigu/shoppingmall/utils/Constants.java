@@ -9,7 +9,9 @@ public class Constants {
 //    public static String BASE_URL = "http://192.168.191.1:8080/atguigu";
     //public static String BASE_URL = "http://10.0.2.2:8080/atguigu";
     //本地
-    public static String BASE_URL = "http://192.168.191.1:8080/atguigu";
+    //public static String BASE_URL = "http://192.168.191.1:8080/atguigu";
+    public static String BASE_URL = "http://192.168.0.101:8080/atguigu";
+
     //公网
     //public static String BASE_URL = "http://182.92.5.3:8081/android/resources/";
 
