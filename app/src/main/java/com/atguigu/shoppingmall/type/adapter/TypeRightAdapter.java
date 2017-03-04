@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +19,6 @@ import com.atguigu.shoppingmall.home.adapter.HomeAdapter;
 import com.atguigu.shoppingmall.home.bean.GoodsBean;
 import com.atguigu.shoppingmall.type.bean.TypeBean;
 import com.atguigu.shoppingmall.utils.Constants;
-import com.atguigu.shoppingmall.utils.DensityUtil;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
@@ -106,6 +104,41 @@ public class TypeRightAdapter extends RecyclerView.Adapter {
         public void setData(final List<TypeBean.ResultBean.HotProductListBean> hotList) {
             for (int i = 0; i < hotList.size(); i++) {
                 TypeBean.ResultBean.HotProductListBean hotProductListBean = hotList.get(i);
+                //创建布局
+                View view = View.inflate(mContext,R.layout.hot_right,null);
+                LinearLayout ll_hot = (LinearLayout) view.findViewById(R.id.ll_hot);
+                ImageView iv_right = (ImageView) view.findViewById(R.id.iv_right);
+                TextView tv_right = (TextView) view.findViewById(R.id.tv_right);
+                Glide.with(mContext).load(Constants.BASE_URL_IMAGE + hotProductListBean.getFigure()).into(iv_right);
+                tv_right.setText("￥" + hotProductListBean.getCover_price());
+                tv_right.setTextColor(Color.parseColor("#ed3f3f"));
+                llHotRight.addView(ll_hot);
+                ll_hot.setTag(i);
+                ll_hot.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int position = (int) v.getTag();
+                        //Toast.makeText(mContext, "position=="+hotList.get(position).getCover_price(), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(mContext, "position==" + position, Toast.LENGTH_SHORT).show();
+                        String cover_price = hotList.get(position).getCover_price();
+                        String figure = hotList.get(position).getFigure();
+                        String name = hotList.get(position).getName();
+                        String product_id = hotList.get(position).getProduct_id();
+
+                        //创建商品Bean对象
+                        GoodsBean goodsBean = new GoodsBean();
+                        goodsBean.setProduct_id(product_id);
+                        goodsBean.setCover_price(cover_price);
+                        goodsBean.setName(name);
+                        goodsBean.setFigure(figure);
+
+                        Intent intent = new Intent(mContext, GoodsInfoActivity.class);
+                        intent.putExtra(HomeAdapter.GOODS_BEAN,goodsBean);
+                        mContext.startActivity(intent);
+                    }
+                });
+//java代码写布局
+                /*TypeBean.ResultBean.HotProductListBean hotProductListBean = hotList.get(i);
                 //外面的线性布局
                 LinearLayout layout = new LinearLayout(mContext);
                 final LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(-2, -2);
@@ -131,8 +164,8 @@ public class TypeRightAdapter extends RecyclerView.Adapter {
                 textView.setText("￥" + hotProductListBean.getCover_price());
                 //把文本添加到线性布局
                 layout.addView(textView, tvParams);
-
-                //把每个线性布局添加到外部的线性布局中
+*/
+                /*//把每个线性布局添加到外部的线性布局中
                 llHotRight.addView(layout, params);
                 //设置item的点击事件
                 layout.setTag(i);
@@ -159,7 +192,7 @@ public class TypeRightAdapter extends RecyclerView.Adapter {
                         mContext.startActivity(intent);
 
                     }
-                });
+                });*/
             }
         }
     }
