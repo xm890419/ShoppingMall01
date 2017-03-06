@@ -25,6 +25,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.atguigu.shoppingmall.MainActivity;
 import com.atguigu.shoppingmall.R;
 import com.atguigu.shoppingmall.home.adapter.HomeAdapter;
 import com.atguigu.shoppingmall.home.bean.GoodsBean;
@@ -176,7 +177,11 @@ public class GoodsInfoActivity extends AppCompatActivity {
                 Toast.makeText(this, "收藏", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.tv_good_info_cart:
-                Toast.makeText(this, "购物车", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "购物车", Toast.LENGTH_SHORT).show();
+                intent = new Intent(this,MainActivity.class);
+                intent.putExtra("checkedid",R.id.rb_cart);
+                startActivity(intent);
+                finish();
                 break;
             case R.id.btn_good_info_addcart:
                 //Toast.makeText(this, "添加到购物车", Toast.LENGTH_SHORT).show();
@@ -190,7 +195,8 @@ public class GoodsInfoActivity extends AppCompatActivity {
                 Toast.makeText(this, "搜索", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.tv_more_home:
-                Toast.makeText(this, "主页", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "主页", Toast.LENGTH_SHORT).show();
+                finish();
                 break;
             case R.id.btn_more:
                 //Toast.makeText(this, "消失更多页面", Toast.LENGTH_SHORT).show();
