@@ -1,8 +1,10 @@
 package com.atguigu.shoppingmall.home.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -14,10 +16,17 @@ import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.atguigu.shoppingmall.R;
+import com.atguigu.shoppingmall.app.GoodsInfoActivity;
+import com.atguigu.shoppingmall.home.adapter.GoodsListAdapter;
+import com.atguigu.shoppingmall.home.adapter.HomeAdapter;
+import com.atguigu.shoppingmall.home.bean.GoodsBean;
 import com.atguigu.shoppingmall.home.bean.GoodsListBean;
+import com.atguigu.shoppingmall.home.view.SpaceItemDecoration;
 import com.atguigu.shoppingmall.utils.Constants;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -97,6 +106,31 @@ public class GoodsListActivity extends AppCompatActivity {
     private void processData(String rsponse) {
         GoodsListBean bean = JSON.parseObject(rsponse,GoodsListBean.class);
         Log.e("TAG",bean.getResult().getPage_data().get(0).getName());
+        List<GoodsListBean.ResultBean.PageDataBean> datas = bean.getResult().getPage_data();
+        if(datas != null && datas.size()>0) {
+            //有数据-设置适配器
+            GoodsListAdapter adapter = new GoodsListAdapter(this,datas);
+            recyclerview.setAdapter(adapter);
+            //设置布局管理器
+            recyclerview.setLayoutManager(new GridLayoutManager(this,2));
+
+            recyclerview.addItemDecoration(new SpaceItemDecoration(10));
+
+            adapter.setOnItemClickListener(new GoodsListAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(GoodsListBean.ResultBean.PageDataBean data) {
+                    GoodsBean goodsBean = new GoodsBean();
+                    goodsBean.setFigure(data.getFigure());
+                    goodsBean.setProduct_id(data.getProduct_id());
+                    goodsBean.setName(data.getName());
+                    goodsBean.setCover_price(data.getCover_price());
+
+                    Intent intent  = new Intent(GoodsListActivity.this, GoodsInfoActivity.class);
+                    intent.putExtra(HomeAdapter.GOODS_BEAN,goodsBean);
+                    startActivity(intent);
+                }
+            });
+        }
     }
 
     @OnClick({R.id.ib_goods_list_back, R.id.tv_goods_list_search, R.id.ib_goods_list_home, R.id.tv_goods_list_sort, R.id.tv_goods_list_price, R.id.tv_goods_list_select})
