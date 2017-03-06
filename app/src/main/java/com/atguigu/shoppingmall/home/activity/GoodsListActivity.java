@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -11,11 +12,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
 import com.atguigu.shoppingmall.R;
+import com.atguigu.shoppingmall.home.bean.GoodsListBean;
+import com.atguigu.shoppingmall.utils.Constants;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.Call;
 
 public class GoodsListActivity extends AppCompatActivity {
 
@@ -41,12 +48,55 @@ public class GoodsListActivity extends AppCompatActivity {
     RecyclerView recyclerview;
     @BindView(R.id.dl_left)
     DrawerLayout dlLeft;
+    private int position;
+    /**
+     * 请求网络
+     */
+    private String[] urls = new String[]{
+            Constants.CLOSE_STORE,
+            Constants.GAME_STORE,
+            Constants.COMIC_STORE,
+            Constants.COSPLAY_STORE,
+            Constants.GUFENG_STORE,
+            Constants.STICK_STORE,
+            Constants.WENJU_STORE,
+            Constants.FOOD_STORE,
+            Constants.SHOUSHI_STORE,
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_goods_list);
         ButterKnife.bind(this);
+        getData();
+    }
+
+    private void getData() {
+        position = getIntent().getIntExtra("position", 0);
+        //Toast.makeText(this, ""+position, Toast.LENGTH_SHORT).show();
+        getDataFromNet(urls[position]);
+    }
+
+    private void getDataFromNet(String url) {
+        OkHttpUtils.get().url(url).build().execute(new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                Log.e("TAG", "联网请求数据失败"+e.getMessage());
+            }
+
+            @Override
+            public void onResponse(String rsponse, int id) {
+                Log.e("TAG", "联网请求数据成功==");
+                processData(rsponse);
+            }
+        });
+    }
+
+    private void processData(String rsponse) {
+        GoodsListBean bean = JSON.parseObject(rsponse,GoodsListBean.class);
+        Log.e("TAG",bean.getResult().getPage_data().get(0).getName());
     }
 
     @OnClick({R.id.ib_goods_list_back, R.id.tv_goods_list_search, R.id.ib_goods_list_home, R.id.tv_goods_list_sort, R.id.tv_goods_list_price, R.id.tv_goods_list_select})
