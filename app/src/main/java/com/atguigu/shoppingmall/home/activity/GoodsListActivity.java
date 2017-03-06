@@ -1,6 +1,7 @@
 package com.atguigu.shoppingmall.home.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +24,7 @@ import com.atguigu.shoppingmall.home.bean.GoodsBean;
 import com.atguigu.shoppingmall.home.bean.GoodsListBean;
 import com.atguigu.shoppingmall.home.view.SpaceItemDecoration;
 import com.atguigu.shoppingmall.utils.Constants;
+import com.atguigu.shoppingmall.utils.DensityUtil;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -72,6 +74,7 @@ public class GoodsListActivity extends AppCompatActivity {
             Constants.FOOD_STORE,
             Constants.SHOUSHI_STORE,
     };
+    private int click_count;
 
 
     @Override
@@ -86,13 +89,25 @@ public class GoodsListActivity extends AppCompatActivity {
         position = getIntent().getIntExtra("position", 0);
         //Toast.makeText(this, ""+position, Toast.LENGTH_SHORT).show();
         getDataFromNet(urls[position]);
+
+        initView();
+    }
+
+    private void initView() {
+        //设置综合排序高亮显示
+        tvGoodsListSort.setTextColor(Color.parseColor("#ed4141"));
+        //价格设置默认
+        tvGoodsListPrice.setTextColor(Color.parseColor("#333538"));
+
+        //筛选设置默认
+        tvGoodsListSelect.setTextColor(Color.parseColor("#333538"));
     }
 
     private void getDataFromNet(String url) {
         OkHttpUtils.get().url(url).build().execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
-                Log.e("TAG", "联网请求数据失败"+e.getMessage());
+                Log.e("TAG", "联网请求数据失败" + e.getMessage());
             }
 
             @Override
@@ -104,17 +119,17 @@ public class GoodsListActivity extends AppCompatActivity {
     }
 
     private void processData(String rsponse) {
-        GoodsListBean bean = JSON.parseObject(rsponse,GoodsListBean.class);
-        Log.e("TAG",bean.getResult().getPage_data().get(0).getName());
+        GoodsListBean bean = JSON.parseObject(rsponse, GoodsListBean.class);
+        Log.e("TAG", bean.getResult().getPage_data().get(0).getName());
         List<GoodsListBean.ResultBean.PageDataBean> datas = bean.getResult().getPage_data();
-        if(datas != null && datas.size()>0) {
+        if (datas != null && datas.size() > 0) {
             //有数据-设置适配器
-            GoodsListAdapter adapter = new GoodsListAdapter(this,datas);
+            GoodsListAdapter adapter = new GoodsListAdapter(this, datas);
             recyclerview.setAdapter(adapter);
             //设置布局管理器
-            recyclerview.setLayoutManager(new GridLayoutManager(this,2));
+            recyclerview.setLayoutManager(new GridLayoutManager(this, 2));
 
-            recyclerview.addItemDecoration(new SpaceItemDecoration(10));
+            recyclerview.addItemDecoration(new SpaceItemDecoration(DensityUtil.dip2px(this,10)));
 
             adapter.setOnItemClickListener(new GoodsListAdapter.OnItemClickListener() {
                 @Override
@@ -125,8 +140,8 @@ public class GoodsListActivity extends AppCompatActivity {
                     goodsBean.setName(data.getName());
                     goodsBean.setCover_price(data.getCover_price());
 
-                    Intent intent  = new Intent(GoodsListActivity.this, GoodsInfoActivity.class);
-                    intent.putExtra(HomeAdapter.GOODS_BEAN,goodsBean);
+                    Intent intent = new Intent(GoodsListActivity.this, GoodsInfoActivity.class);
+                    intent.putExtra(HomeAdapter.GOODS_BEAN, goodsBean);
                     startActivity(intent);
                 }
             });
@@ -146,13 +161,46 @@ public class GoodsListActivity extends AppCompatActivity {
                 Toast.makeText(this, "主页面", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.tv_goods_list_sort:
-                Toast.makeText(this, "综合排序", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "综合排序", Toast.LENGTH_SHORT).show();
+                click_count=0;
+                ivGoodsListArrow.setBackgroundResource(R.drawable.new_price_sort_normal);
+                //设置综合排序高亮显示
+                tvGoodsListSort.setTextColor(Color.parseColor("#ed4141"));
+                //价格设置默认
+                tvGoodsListPrice.setTextColor(Color.parseColor("#333538"));
+
+                //筛选设置默认
+                tvGoodsListSelect.setTextColor(Color.parseColor("#333538"));
                 break;
             case R.id.tv_goods_list_price:
-                Toast.makeText(this, "价格", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "价格", Toast.LENGTH_SHORT).show();
+                //价格设置高亮显示
+                tvGoodsListPrice.setTextColor(Color.parseColor("#ed4141"));
+                //筛选设置默认
+                tvGoodsListSelect.setTextColor(Color.parseColor("#333538"));
+                //设置综合排序默认
+                tvGoodsListSort.setTextColor(Color.parseColor("#333538"));
+
+                click_count++;
+                if (click_count % 2 == 1) {
+                    // 箭头向下红
+                    ivGoodsListArrow.setBackgroundResource(R.drawable.new_price_sort_desc);
+                } else {
+                    // 箭头向上红
+                    ivGoodsListArrow.setBackgroundResource(R.drawable.new_price_sort_asc);
+                }
+
                 break;
             case R.id.tv_goods_list_select:
-                Toast.makeText(this, "筛选", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "筛选", Toast.LENGTH_SHORT).show();
+                click_count =0;
+                ivGoodsListArrow.setBackgroundResource(R.drawable.new_price_sort_normal);
+                //筛选设置高亮显示
+                tvGoodsListSelect.setTextColor(Color.parseColor("#ed4141"));
+                //设置综合排序默认
+                tvGoodsListSort.setTextColor(Color.parseColor("#333538"));
+                //价格设置默认
+                tvGoodsListPrice.setTextColor(Color.parseColor("#333538"));
                 break;
         }
     }
